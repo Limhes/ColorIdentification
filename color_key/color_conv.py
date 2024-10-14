@@ -31,7 +31,6 @@ def xyz2xyy(XYZ):
 
 def xyy2munsell(xyY):
     try:
-        # WARNING this takes around a minute to complete, so only uncomment when you want to generate the Munsell names!
         munsell = colour.xyY_to_munsell_colour(xyY)
     except:
         # when color is outside the Munsell gamut, the routine throws an exception. How convenient :(
