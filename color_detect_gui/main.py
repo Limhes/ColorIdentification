@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVB
 from PyQt5.QtGui import QKeySequence, QPixmap, QImage
 from PyQt5.QtCore import Qt, QSettings, QDir, pyqtSignal, QByteArray, QBuffer, QIODevice
 
-
 from stampcolor.widgets import ImageViewer
 from stampcolor.color_func import colorTransform
 
@@ -14,15 +13,12 @@ class MainWindow(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # set the window title
         self.setWindowTitle('Hello World')
-
         self.setupSettings()
         self.setupUI()
 
         self.colorTransform = colorTransform()
 
-        # show the window
         self.showMaximized()
 
     def setupSettings(self):
@@ -79,7 +75,6 @@ class MainWindow(QWidget):
                     lbl = QLabel()
                     lbl.setFixedHeight(150)
                     lbl.setFixedWidth(500)
-                    #lbl.setText(f"RGB: {color['rgb']}\nMunsell: {color['munsell']}\nISCC-NBS: {color['isccnbs']}\nStanley-Gibbons: {color['colorkey']}")
                     lbl.setText(f"RGB: {color['rgb']}\nCIEXYZ (D65, 2°): {color['ciexyz']}\nCIELAB (D65, 2°): {color['cielab']}\n" +
                                 f"\nMatch: Stanley-Gibbons: {color['colorkey']}\nMatch: Munsell: {color['munsell']}")
                     lbl.setStyleSheet(f"background-color: rgb({color['rgb']})")
@@ -97,7 +92,6 @@ class MainWindow(QWidget):
 
     def selectionCaptured(self):
         self.selectionLabel.setPixmap(self.imageViewer.getSelection())
-        #self.selectionLabel.setText("rectangle " + str(self.imageViewer.getSelection().width()) + "x" + str(self.imageViewer.getSelection().height()) + " px")
 
 
 if __name__ == '__main__':

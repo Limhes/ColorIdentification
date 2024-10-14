@@ -66,8 +66,8 @@ class colorTransform:
         RGB = [x*100 for x in RGB]
 
         XYZ = [RGB [0] * 0.4124 + RGB [1] * 0.3576 + RGB [2] * 0.1805,
-            RGB [0] * 0.2126 + RGB [1] * 0.7152 + RGB [2] * 0.0722,
-            RGB [0] * 0.0193 + RGB [1] * 0.1192 + RGB [2] * 0.9505]
+               RGB [0] * 0.2126 + RGB [1] * 0.7152 + RGB [2] * 0.0722,
+               RGB [0] * 0.0193 + RGB [1] * 0.1192 + RGB [2] * 0.9505] # this could/should be a matrix multiplication
         XYZ = [round(x, 4)/ill for x,ill in zip(XYZ,ill)]
         XYZ = [x**0.3333 if x > 0.008856 else (7.787*x)+(16/116) for x in XYZ]
 
