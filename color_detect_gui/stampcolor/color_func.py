@@ -39,14 +39,15 @@ class colorTransform:
 
         clt = KMeans(n_clusters = num_clusters)
         clt.fit(cropped_region)
+        colors_rgb = [list(reversed(c)) for c in clt.cluster_centers_]
 
         matches = []
-        for color in clt.cluster_centers_:
-            color_rgb = list(reversed(color))
+        for color_rgb in colors_rgb:
             color_xyz = self.rgb2xyz(color_rgb)
             munsell, isccbns = self.findRGB(color_rgb)
             key_name, key_rgb = self.findColorKey(color_rgb)
             matches.append( {"rgb": ", ".join([str(int(c)) for c in color_rgb]),
+                             "rgb_list": color_rgb,
                              "cielab": self.xyz2lab(color_xyz),
                              "ciexyz": color_xyz,
                              "munsell": munsell + " (" + isccbns + ")",

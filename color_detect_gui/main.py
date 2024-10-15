@@ -67,17 +67,17 @@ class MainWindow(QWidget):
         self.keyPressText.setText(key)
         try:
             keyNumber = int(key)
-            if keyNumber > 1 and keyNumber < 10:
+            if keyNumber > 0 and keyNumber < 10:
                 for i in reversed(range(self.colorsLayout.count())):
                     self.colorsLayout.itemAt(i).widget().setParent(None) # remove from layout
 
                 for color in self.colorTransform.cluster(self.selectionLabel.pixmap(), keyNumber):
                     lbl = QLabel()
-                    lbl.setFixedHeight(150)
-                    lbl.setFixedWidth(500)
+                    #lbl.setFixedHeight(150)
+                    #lbl.setFixedWidth(500)
                     lbl.setText(f"RGB: {color['rgb']}\nCIEXYZ (D65, 2°): {color['ciexyz']}\nCIELAB (D65, 2°): {color['cielab']}\n" +
                                 f"\nMatch: Stanley-Gibbons: {color['colorkey']}\nMatch: Munsell: {color['munsell']}")
-                    lbl.setStyleSheet(f"background-color: rgb({color['rgb']})")
+                    lbl.setStyleSheet(f"background-color: rgb({color['rgb']}); color: {'black' if sum(color['rgb_list']) > 400 else 'white'};")
                     self.colorsLayout.addWidget(lbl)
 
         except ValueError as e:
@@ -85,7 +85,7 @@ class MainWindow(QWidget):
 
     def loadImageFromFile(self):
         fileOpenPath = self.settings.value("General/fileOpenPath", ".")
-        fileName = QFileDialog.getOpenFileName(self, "Open Image", fileOpenPath , "Image Files (*.png *.jpg *.jpeg *.bmp)")
+        fileName = QFileDialog.getOpenFileName(self, "Open Image", fileOpenPath , "Image Files (*.png *.jpg *.jpeg *.bmp *tif *tiff)")
         if fileName[0]:
             self.settings.setValue("General/fileOpenPath", fileName[0])
             self.imageViewer.loadImage(fileName[0])
