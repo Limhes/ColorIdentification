@@ -1,11 +1,34 @@
-from PyQt5.QtGui import QImage
-from PyQt5.QtCore import Qt, QSettings, QDir, pyqtSignal, QByteArray, QBuffer, QIODevice
-
 import numpy as np
 import pandas as pd
-import cv2
 from sklearn.cluster import KMeans
 import colour
+import cv2 as cv
+
+def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
+    """Return a sharpened version of the image, using an unsharp mask."""
+    blurred = cv.GaussianBlur(image, kernel_size, sigma)
+    sharpened = float(amount + 1) * image - float(amount) * blurred
+    sharpened = np.maximum(sharpened, np.zeros(sharpened.shape))
+    sharpened = np.minimum(sharpened, 255 * np.ones(sharpened.shape))
+    sharpened = sharpened.round().astype(np.uint8)
+    if threshold > 0:
+        low_contrast_mask = np.absolute(image - blurred) < threshold
+        np.copyto(sharpened, image, where=low_contrast_mask)
+    return sharpened
+
+def crop_rect(img, rect):
+    # get the parameter of the small rectangle
+    center, size, angle = rect[0], rect[1], rect[2]
+    center, size = tuple(map(int, center)), tuple(map(int, size))
+    # get row and col num in img
+    height, width = img.shape[0], img.shape[1]
+    # calculate the rotation matrix
+    M = cv.getRotationMatrix2D(center, angle, 1)
+    # rotate the original image
+    img_rot = cv.warpAffine(img, M, (width, height))
+    # now rotated rectangle becomes vertical, and we crop it
+    img_crop = cv.getRectSubPix(img_rot, size, center)
+    return img_crop
 
 
 class colorTransform:
@@ -27,22 +50,14 @@ class colorTransform:
         df = self.colorKey.loc[self.colorKey["distance"]==self.colorKey["distance"].min()]
         return (df["ColorName"].values[0], (df["RGB_R"].values[0], df["RGB_G"].values[0], df["RGB_B"].values[0]))
 
-    def cluster(self, pixmap, num_clusters):
-        qimg = pixmap.toImage().convertToFormat(QImage.Format.Format_RGB32)
-        ba = QByteArray()
-        buff = QBuffer(ba)
-        buff.open(QIODevice.ReadWrite) # Essentially open up a "RAM" file
-        qimg.save(buff, "PNG") # Store a PNG formatted file into the "RAM" File
-        fBytes = np.asarray(bytearray(ba.data()), dtype=np.uint8) # Convert the now PNG contents into a numpy array of bytes
-        cropped_region = cv2.imdecode(fBytes, cv2.IMREAD_COLOR) # Let OpenCV "decode" the bytes in RAM as a PNG
+    def cluster(self, cropped_region, num_clusters):
         cropped_region = cropped_region.reshape((cropped_region.shape[0] * cropped_region.shape[1], 3))
 
         clt = KMeans(n_clusters = num_clusters)
         clt.fit(cropped_region)
-        colors_rgb = [list(reversed(c)) for c in clt.cluster_centers_]
 
         matches = []
-        for color_rgb in colors_rgb:
+        for color_rgb in clt.cluster_centers_:
             color_xyz = self.rgb2xyz(color_rgb)
             munsell, isccbns = self.findRGB(color_rgb)
             key_name, key_rgb = self.findColorKey(color_rgb)

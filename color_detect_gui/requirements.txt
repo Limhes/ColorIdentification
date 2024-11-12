@@ -1,0 +1,8 @@
+PySide6
+numpy
+pandas
+matplotlib
+opencv
+colour-science
+pillow
+sklearn

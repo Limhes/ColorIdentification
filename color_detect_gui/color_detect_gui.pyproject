@@ -1,0 +1,8 @@
+{
+    "files": [
+        "widget.py",
+        "form.ui",
+        "stampcolor/color_func.py",
+        "stampcolor/__init__.py"
+    ]
+}
