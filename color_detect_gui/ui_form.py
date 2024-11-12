@@ -17,8 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QHeaderView, QLabel, QLayout, QPushButton,
-    QSizePolicy, QSpinBox, QTableWidget, QTableWidgetItem,
-    QVBoxLayout, QWidget)
+    QSizePolicy, QSlider, QSpinBox, QTableWidget,
+    QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_Widget(object):
     def setupUi(self, Widget):
@@ -33,38 +33,65 @@ class Ui_Widget(object):
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.btnLoadFile = QPushButton(self.frame)
+        self.btnLoadFile.setObjectName(u"btnLoadFile")
+
+        self.gridLayout.addWidget(self.btnLoadFile, 0, 1, 1, 1)
+
+        self.btnFindStamps = QPushButton(self.frame)
+        self.btnFindStamps.setObjectName(u"btnFindStamps")
+
+        self.gridLayout.addWidget(self.btnFindStamps, 0, 3, 1, 1)
+
+        self.btnAnalyzeColors = QPushButton(self.frame)
+        self.btnAnalyzeColors.setObjectName(u"btnAnalyzeColors")
+
+        self.gridLayout.addWidget(self.btnAnalyzeColors, 0, 5, 1, 1)
+
+        self.btnScanImage = QPushButton(self.frame)
+        self.btnScanImage.setObjectName(u"btnScanImage")
+
+        self.gridLayout.addWidget(self.btnScanImage, 0, 2, 1, 1)
+
+        self.spnDPI = QSpinBox(self.frame)
+        self.spnDPI.setObjectName(u"spnDPI")
+        self.spnDPI.setMinimum(50)
+        self.spnDPI.setMaximum(1200)
+        self.spnDPI.setSingleStep(50)
+        self.spnDPI.setValue(150)
+
+        self.gridLayout.addWidget(self.spnDPI, 1, 2, 1, 1)
+
         self.spnNumColors = QSpinBox(self.frame)
         self.spnNumColors.setObjectName(u"spnNumColors")
         self.spnNumColors.setMinimum(1)
         self.spnNumColors.setMaximum(5)
 
-        self.gridLayout.addWidget(self.spnNumColors, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.spnNumColors, 1, 5, 1, 1)
 
-        self.btnAnalyzeColors = QPushButton(self.frame)
-        self.btnAnalyzeColors.setObjectName(u"btnAnalyzeColors")
+        self.sldThreshold = QSlider(self.frame)
+        self.sldThreshold.setObjectName(u"sldThreshold")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sldThreshold.sizePolicy().hasHeightForWidth())
+        self.sldThreshold.setSizePolicy(sizePolicy)
+        self.sldThreshold.setMaximum(255)
+        self.sldThreshold.setValue(70)
+        self.sldThreshold.setOrientation(Qt.Orientation.Horizontal)
 
-        self.gridLayout.addWidget(self.btnAnalyzeColors, 0, 3, 1, 1)
-
-        self.btnLoadFile = QPushButton(self.frame)
-        self.btnLoadFile.setObjectName(u"btnLoadFile")
-
-        self.gridLayout.addWidget(self.btnLoadFile, 0, 0, 1, 1)
-
-        self.btnFindStamps = QPushButton(self.frame)
-        self.btnFindStamps.setObjectName(u"btnFindStamps")
-
-        self.gridLayout.addWidget(self.btnFindStamps, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.sldThreshold, 1, 3, 1, 1)
 
 
         self.verticalLayout.addWidget(self.frame)
 
         self.frame_2 = QFrame(Widget)
         self.frame_2.setObjectName(u"frame_2")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
-        self.frame_2.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy1)
         self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame_2)
@@ -72,18 +99,18 @@ class Ui_Widget(object):
         self.horizontalLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.lblImageDisplay = QLabel(self.frame_2)
         self.lblImageDisplay.setObjectName(u"lblImageDisplay")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy1.setHorizontalStretch(1)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.lblImageDisplay.sizePolicy().hasHeightForWidth())
-        self.lblImageDisplay.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(1)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.lblImageDisplay.sizePolicy().hasHeightForWidth())
+        self.lblImageDisplay.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.lblImageDisplay)
 
         self.tblColors = QTableWidget(self.frame_2)
         self.tblColors.setObjectName(u"tblColors")
-        sizePolicy1.setHeightForWidth(self.tblColors.sizePolicy().hasHeightForWidth())
-        self.tblColors.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.tblColors.sizePolicy().hasHeightForWidth())
+        self.tblColors.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.tblColors)
 
@@ -98,9 +125,12 @@ class Ui_Widget(object):
 
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
-        self.btnAnalyzeColors.setText(QCoreApplication.translate("Widget", u"Analyze colors", None))
-        self.btnLoadFile.setText(QCoreApplication.translate("Widget", u"Load file", None))
+        self.btnLoadFile.setText(QCoreApplication.translate("Widget", u"Load image from file", None))
         self.btnFindStamps.setText(QCoreApplication.translate("Widget", u"Detect stamps", None))
+        self.btnAnalyzeColors.setText(QCoreApplication.translate("Widget", u"Analyze colors", None))
+        self.btnScanImage.setText(QCoreApplication.translate("Widget", u"Scan image", None))
+        self.spnDPI.setSuffix(QCoreApplication.translate("Widget", u" DPI", None))
+        self.spnNumColors.setPrefix(QCoreApplication.translate("Widget", u"Number of colors: ", None))
         self.lblImageDisplay.setText("")
     # retranslateUi
 

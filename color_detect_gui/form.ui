@@ -23,8 +23,58 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QPushButton" name="btnLoadFile">
+        <property name="text">
+         <string>Load image from file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="btnFindStamps">
+        <property name="text">
+         <string>Detect stamps</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QPushButton" name="btnAnalyzeColors">
+        <property name="text">
+         <string>Analyze colors</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="2">
+       <widget class="QPushButton" name="btnScanImage">
+        <property name="text">
+         <string>Scan image</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QSpinBox" name="spnDPI">
+        <property name="suffix">
+         <string> DPI</string>
+        </property>
+        <property name="minimum">
+         <number>50</number>
+        </property>
+        <property name="maximum">
+         <number>1200</number>
+        </property>
+        <property name="singleStep">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>150</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
        <widget class="QSpinBox" name="spnNumColors">
+        <property name="prefix">
+         <string>Number of colors: </string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -33,24 +83,22 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="btnAnalyzeColors">
-        <property name="text">
-         <string>Analyze colors</string>
+      <item row="1" column="3">
+       <widget class="QSlider" name="sldThreshold">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="btnLoadFile">
-        <property name="text">
-         <string>Load file</string>
+        <property name="maximum">
+         <number>255</number>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="btnFindStamps">
-        <property name="text">
-         <string>Detect stamps</string>
+        <property name="value">
+         <number>70</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
        </widget>
       </item>
