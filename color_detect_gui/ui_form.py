@@ -107,12 +107,26 @@ class Ui_Widget(object):
 
         self.horizontalLayout.addWidget(self.lblImageDisplay)
 
-        self.tblColors = QTableWidget(self.frame_2)
+        self.wdgRight = QWidget(self.frame_2)
+        self.wdgRight.setObjectName(u"wdgRight")
+        sizePolicy2.setHeightForWidth(self.wdgRight.sizePolicy().hasHeightForWidth())
+        self.wdgRight.setSizePolicy(sizePolicy2)
+        self.verticalLayout_2 = QVBoxLayout(self.wdgRight)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.tblColors = QTableWidget(self.wdgRight)
         self.tblColors.setObjectName(u"tblColors")
         sizePolicy2.setHeightForWidth(self.tblColors.sizePolicy().hasHeightForWidth())
         self.tblColors.setSizePolicy(sizePolicy2)
 
-        self.horizontalLayout.addWidget(self.tblColors)
+        self.verticalLayout_2.addWidget(self.tblColors)
+
+        self.btnPlotColors = QPushButton(self.wdgRight)
+        self.btnPlotColors.setObjectName(u"btnPlotColors")
+
+        self.verticalLayout_2.addWidget(self.btnPlotColors)
+
+
+        self.horizontalLayout.addWidget(self.wdgRight)
 
 
         self.verticalLayout.addWidget(self.frame_2)
@@ -132,5 +146,6 @@ class Ui_Widget(object):
         self.spnDPI.setSuffix(QCoreApplication.translate("Widget", u" DPI", None))
         self.spnNumColors.setPrefix(QCoreApplication.translate("Widget", u"Number of colors: ", None))
         self.lblImageDisplay.setText("")
+        self.btnPlotColors.setText(QCoreApplication.translate("Widget", u"Plot selected colors", None))
     # retranslateUi
 

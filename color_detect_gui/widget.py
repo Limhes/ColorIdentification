@@ -5,6 +5,11 @@ from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QTableWidgetIt
 from PySide6.QtGui import QPixmap, QImage, QColor
 from PySide6.QtCore import Qt, QSettings
 
+from matplotlib.backends.backend_qtagg import FigureCanvas
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.qt_compat import QtWidgets
+from matplotlib.figure import Figure
+
 from PIL import Image, ImageCms
 import cv2 as cv
 import numpy as np
@@ -24,11 +29,13 @@ class Widget(QWidget):
         super().__init__(parent)
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
+        self.addPlot()
 
         self.ui.btnLoadFile.clicked.connect(self.loadImageFromFile)
         self.ui.btnFindStamps.clicked.connect(self.findStamps)
         self.ui.btnAnalyzeColors.clicked.connect(self.analyzeColors)
         self.ui.btnScanImage.clicked.connect(self.scanImage)
+        self.ui.btnPlotColors.clicked.connect(self.plotColors)
 
         self.colorTransform = colorTransform()
         self.cropped_regions = []
@@ -168,13 +175,52 @@ class Widget(QWidget):
 
             for row_index, colors in enumerate(self.colors_detected):
                 for col_index, color in enumerate(colors):
-                    color_item = QTableWidgetItem(color['munsell'])
+                    color_item = TableItem(color['munsell'])
                     color_item.setToolTip(f"RGB: {color['rgb']}\nCIEXYZ (D65, 2°): {color['ciexyz']}\nCIELAB (D65, 2°): {color['cielab']}" +
                                           f"\nMatch: Stanley-Gibbons: {color['colorkey']}\nMatch: Munsell: {color['munsell']}")
+                    color_item.setLab(color['cielab'])
                     color_item.setBackground(QColor.fromRgb(int(color['rgb_list'][0]), int(color['rgb_list'][1]), int(color['rgb_list'][2])))
                     self.ui.tblColors.setItem(row_index, col_index, color_item)
 
             self.ui.tblColors.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+
+    def plotColors(self):
+        selected = self.ui.tblColors.selectedItems()
+        a_val = []
+        b_val = []
+        i_val = []
+        if selected:
+            for item in selected:
+                i_val.append(item.row())
+                lab = item.getLab()
+                a_val.append(lab[1])
+                b_val.append(lab[2])
+
+        self.ax_handle.set_data(a_val, b_val)
+        self.ax_handle.figure.canvas.draw()
+
+    def addPlot(self):
+        self.static_canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.ui.wdgRight.layout().addWidget(NavigationToolbar(self.static_canvas, self))
+        self.ui.wdgRight.layout().addWidget(self.static_canvas)
+        self.static_ax = self.static_canvas.figure.subplots()
+        self.ax_handle, = self.static_ax.plot([0], [0], ".")
+        self.static_ax.set_xlim(-127, 127)
+        self.static_ax.set_ylim(-127, 127)
+        self.static_ax.set_xlabel("CIELAB a*")
+        self.static_ax.set_ylabel("CIELAB b*")
+        self.static_ax.set_title("CIELAB (D65, 2°)")
+
+class TableItem(QTableWidgetItem):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def setLab(self, Lab):
+        self.Lab = Lab
+
+    def getLab(self):
+        return self.Lab
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
