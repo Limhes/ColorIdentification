@@ -1,13 +1,12 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QHeaderView, QLabel, QSizePolicy
 from PySide6.QtGui import QPixmap, QImage, QColor
 from PySide6.QtCore import Qt, QSettings
 
 from matplotlib.backends.backend_qtagg import FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.backends.qt_compat import QtWidgets
 from matplotlib.figure import Figure
 
 from PIL import Image, ImageCms
@@ -15,7 +14,8 @@ import cv2 as cv
 import numpy as np
 import sane
 
-from stampcolor.color_func import colorTransform, unsharp_mask, crop_rect
+from stampcolor import ColorTransform, unsharp_mask, crop_rect
+from widgets import TableItem, PictureViewer
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -30,6 +30,7 @@ class Widget(QWidget):
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
         self.addPlot()
+        self.addPictureViewer()
 
         self.ui.btnLoadFile.clicked.connect(self.loadImageFromFile)
         self.ui.btnFindStamps.clicked.connect(self.findStamps)
@@ -37,7 +38,7 @@ class Widget(QWidget):
         self.ui.btnScanImage.clicked.connect(self.scanImage)
         self.ui.btnPlotColors.clicked.connect(self.plotColors)
 
-        self.colorTransform = colorTransform()
+        self.colorTransform = ColorTransform()
         self.cropped_regions = []
         self.colors_detected = []
         self.image_cv_original_rgb = None
@@ -94,10 +95,7 @@ class Widget(QWidget):
         h, w, ch = image_cv.shape
         bytes_per_line = ch * w
         image_qt = QImage(image_cv.data, w, h, bytes_per_line, QImage.Format_RGB888)
-
-        imagePixmap = QPixmap.fromImage(image_qt).scaled(self.ui.lblImageDisplay.width(), self.ui.lblImageDisplay.height(), Qt.KeepAspectRatio)
-        #imagePixmap.scaled(self.ui.lblImageDisplay.width(), self.ui.lblImageDisplay.height(), Qt.KeepAspectRatio)
-        self.ui.lblImageDisplay.setPixmap(imagePixmap)
+        self.pictureViewer.setImageQt(image_qt)
 
     def findStamps(self):
         image_dpi = self.ui.spnDPI.value()
@@ -119,6 +117,7 @@ class Widget(QWidget):
 
         self.cropped_regions = []
         original_rgb = self.image_cv_original_rgb.copy()
+        source_for_croppedregions = cv.cvtColor(self.image_cv_original_rgb, cv.COLOR_RGB2Lab)
         stamp_index = 1
         for c in cnts:
             feature_area = cv.contourArea(c)
@@ -135,7 +134,7 @@ class Widget(QWidget):
             delta = min(rect_width, rect_height) / 5
             new_rect_tuple = (center_points, (rect_width/area_ratio-delta, rect_height/area_ratio-delta), angle)
             new_rect = cv.RotatedRect(*new_rect_tuple)
-            self.cropped_regions.append( crop_rect(original_rgb, new_rect_tuple) )
+            self.cropped_regions.append( crop_rect(source_for_croppedregions, new_rect_tuple) )
             box_points = np.intp(cv.boxPoints(new_rect))
             # draw rectangles and text onto original image
             cv.drawContours(original_rgb, [box_points], 0, (255,255,0), 2)
@@ -144,7 +143,6 @@ class Widget(QWidget):
             original_rgb = cv.putText(original_rgb, str(stamp_index), [int(p) for p in center_points],\
                                       cv.FONT_HERSHEY_SIMPLEX, 1, (255,255,0), 2, cv.LINE_AA)
             stamp_index += 1
-
 
         self.displayImage(original_rgb)
 
@@ -163,10 +161,6 @@ class Widget(QWidget):
                 self.colors_detected.append(region_colors)
 
             self.populateColorTable()
-
-        # for color in self.colorTransform.cluster(self.selectionLabel.pixmap(), num_colors):
-        #     print(f"RGB: {color['rgb']}\nCIEXYZ (D65, 2°): {color['ciexyz']}\nCIELAB (D65, 2°): {color['cielab']}\n" +
-        #                 f"\nMatch: Stanley-Gibbons: {color['colorkey']}\nMatch: Munsell: {color['munsell']}\n\n")
 
     def populateColorTable(self):
         if len(self.colors_detected) > 0:
@@ -211,15 +205,13 @@ class Widget(QWidget):
         self.static_ax.set_ylabel("CIELAB b*")
         self.static_ax.set_title("CIELAB (D65, 2°)")
 
-class TableItem(QTableWidgetItem):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-    def setLab(self, Lab):
-        self.Lab = Lab
-
-    def getLab(self):
-        return self.Lab
+    def addPictureViewer(self):
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        self.pictureViewer = PictureViewer()
+        self.pictureViewer.setSizePolicy(sizePolicy)
+        self.ui.frmMain.layout().insertWidget(0, self.pictureViewer)
 
 
 if __name__ == "__main__":

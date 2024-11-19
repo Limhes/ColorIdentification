@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 14.0.2, 2024-11-12T14:10:22. -->
+<!-- Written by QtCreator 14.0.2, 2024-11-12T19:58:45. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -174,7 +174,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">stampcolor/color_func.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/color_func.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/color_func.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/color_func.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -194,7 +194,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">stampcolor/__init__.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/__init__.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/__init__.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/stampcolor/__init__.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>

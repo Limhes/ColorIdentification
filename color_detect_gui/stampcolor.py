@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
 import colour
 import cv2 as cv
 
@@ -17,21 +17,16 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
     return sharpened
 
 def crop_rect(img, rect):
-    # get the parameter of the small rectangle
-    center, size, angle = rect[0], rect[1], rect[2]
+    center, size, angle = rect[0], rect[1], rect[2] # get the parameter of the small rectangle
     center, size = tuple(map(int, center)), tuple(map(int, size))
-    # get row and col num in img
-    height, width = img.shape[0], img.shape[1]
-    # calculate the rotation matrix
-    M = cv.getRotationMatrix2D(center, angle, 1)
-    # rotate the original image
-    img_rot = cv.warpAffine(img, M, (width, height))
-    # now rotated rectangle becomes vertical, and we crop it
-    img_crop = cv.getRectSubPix(img_rot, size, center)
+    height, width = img.shape[0], img.shape[1] # get row and col num in img
+    M = cv.getRotationMatrix2D(center, angle, 1) # calculate the rotation matrix
+    img_rot = cv.warpAffine(img, M, (width, height)) # rotate the original image
+    img_crop = cv.getRectSubPix(img_rot, size, center) # now rotated rectangle becomes vertical, and we crop it
     return img_crop
 
 
-class colorTransform:
+class ColorTransform:
     def __init__(self):
         self.colorNames = pd.read_csv("./color_systems/sRGBToMunsellAndISCCNBS.csv", comment="#", delimiter=",")
         self.colorKey = pd.read_csv("./color_systems/color_key_calibrated.csv")
@@ -40,59 +35,80 @@ class colorTransform:
     def findRGB(self, color_rgb):
         srgb_rounded5 = np.array([int(5*round(c/5)) for c in color_rgb])
         df = self.colorNames.loc[(self.colorNames["R"] == srgb_rounded5[0]) & (self.colorNames["G"] == srgb_rounded5[1]) & (self.colorNames["B"] == srgb_rounded5[2])]
-        if not df.empty:
-            return df["Munsell"].loc[df.index[0]], df["ISCC-NBS"].loc[df.index[0]]
-        else:
-            return "", ""
+        return (df["Munsell"].loc[df.index[0]], df["ISCC-NBS"].loc[df.index[0]]) if not df.empty else ("", "")
 
     def findColorKey(self, color_rgb):
         self.colorKey["distance"] = ((self.colorKey["RGB_R"] - color_rgb[0])**2 + (self.colorKey["RGB_G"] - color_rgb[1])**2 + (self.colorKey["RGB_B"] - color_rgb[2])**2)**0.5
         df = self.colorKey.loc[self.colorKey["distance"]==self.colorKey["distance"].min()]
         return (df["ColorName"].values[0], (df["RGB_R"].values[0], df["RGB_G"].values[0], df["RGB_B"].values[0]))
 
+    def colorDict(self, color_rgb):
+        color_xyz = self.rgb2xyz(color_rgb)
+        munsell, isccbns = self.findRGB(color_rgb)
+        key_name, key_rgb = self.findColorKey(color_rgb)
+        return {"rgb": ", ".join([str(int(c)) for c in color_rgb]),
+            "rgb_list": color_rgb,
+            "cielab": self.xyz2lab(color_xyz),
+            "ciexyz": color_xyz,
+            "munsell": munsell + " (" + isccbns + ")",
+            "colorkey": key_name + " (" + ", ".join([str(int(c)) for c in key_rgb]) + ")",
+        }
+
     def cluster(self, cropped_region, num_clusters):
-        cropped_region = cropped_region.reshape((cropped_region.shape[0] * cropped_region.shape[1], 3))
+        data_to_fit = cropped_region.reshape((cropped_region.shape[0] * cropped_region.shape[1], 3))
+        #data_to_fit = np.array([ self.xyz2lab(self.rgb2xyz(c)) for c in data_to_fit], dtype=np.float64)
+        data_to_fit = np.array(data_to_fit, dtype=np.float64)
 
-        clt = KMeans(n_clusters = num_clusters)
-        clt.fit(cropped_region)
+        clt = MiniBatchKMeans(n_clusters = num_clusters).fit(data_to_fit)
+        #return [ self.colorDict([int(c*255) for c in color_rgb]) for color_rgb in clt.cluster_centers_ ]
+        #return [ self.colorDict(color_rgb) for color_rgb in clt.cluster_centers_ ]
 
-        matches = []
-        for color_rgb in clt.cluster_centers_:
-            color_xyz = self.rgb2xyz(color_rgb)
-            munsell, isccbns = self.findRGB(color_rgb)
-            key_name, key_rgb = self.findColorKey(color_rgb)
-            matches.append( {"rgb": ", ".join([str(int(c)) for c in color_rgb]),
-                             "rgb_list": color_rgb,
-                             "cielab": self.xyz2lab(color_xyz),
-                             "ciexyz": color_xyz,
-                             "munsell": munsell + " (" + isccbns + ")",
-                             "colorkey": key_name + " (" + ", ".join([str(int(c)) for c in key_rgb]) + ")",
-                             } )
-        return matches
+        centers_color_lab = [[c[0]/255.0*100.0, c[1]-128.0, c[2]-128.0] for c in clt.cluster_centers_]
+        color_rgb = [self.xyz2rgb(self.lab2xyz(color_lab)) for color_lab in centers_color_lab]
+        return [ self.colorDict(c) for c in color_rgb ]
 
-    def rgb2xyz(self, RGB, illuminant="D65"):
+    def rgb2xyz(self, rgb, illuminant="D65"):
         # 2 degree observer:
         if illuminant == "D50":
             ill = [96.4212, 100.0, 82.5188]
         else: # D65 and default
             ill = [95.047, 100.0, 108.883]
 
-        RGB = [float(x)/255 for x in RGB]
-        RGB = [((x+0.055)/1.055)**2.4 if x > 0.04045 else x/12.92 for x in RGB]
-        RGB = [x*100 for x in RGB]
+        rgb = np.array(rgb, dtype=float) / 255.0
+        rgb = np.where(rgb > 0.04045, ((rgb+0.055)/1.055)**2.4, rgb/12.92) * 100
+        M = np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]], dtype=float)
+        xyz = np.matmul(M, rgb)
+        xyz = np.divide(xyz, ill)
+        xyz = np.where(xyz > 0.008856, xyz**0.3333, (7.787*xyz)+(16/116))
+        return [round(x, 4) for x in xyz]
 
-        XYZ = [RGB [0] * 0.4124 + RGB [1] * 0.3576 + RGB [2] * 0.1805,
-               RGB [0] * 0.2126 + RGB [1] * 0.7152 + RGB [2] * 0.0722,
-               RGB [0] * 0.0193 + RGB [1] * 0.1192 + RGB [2] * 0.9505] # this could/should be a matrix multiplication
-        XYZ = [round(x, 4)/ill for x,ill in zip(XYZ,ill)]
-        XYZ = [x**0.3333 if x > 0.008856 else (7.787*x)+(16/116) for x in XYZ]
+    def xyz2rgb(self, xyz, illuminant="D65"):
+        # 2 degree observer:
+        if illuminant == "D50":
+            ill = [96.4212, 100.0, 82.5188]
+        else: # D65 and default
+            ill = [95.047, 100.0, 108.883]
 
-        return [round(x, 4) for x in XYZ]
+        delta = 6.0/29.0
+        xyz = np.array(xyz, dtype=float)
+        xyz = np.where(xyz > delta, xyz**3, 3*(delta**2)*(xyz-4.0/29.0))
+        xyz = np.multiply(xyz, ill)
+        M = np.array([[3.2406, -1.5372, -0.4986], [-0.9689, 1.8758, 0.0415], [0.0557, -0.2040, 1.0570]], dtype=float)
+        rgb = np.matmul(M, xyz) / 100.0
+        rgb = np.clip(rgb, 0.0, 1.0)
+        rgb = np.where(rgb > 0.0031308, (1.055*(rgb**(1.0/2.4))-0.055), rgb*12.92) * 255.0
+        rgb = np.clip(rgb, 0.0, 255.0)
+        return [round(x, 4) for x in rgb]
 
     def xyz2lab(self, XYZ):
         return [round(x, 4) for x in [(116 * XYZ[1] ) - 16,
                                     500 * ( XYZ[0] - XYZ[1]),
                                     200 * ( XYZ[1] - XYZ[2])]]
+
+    def lab2xyz(self, LAB):
+        return [round(x, 4) for x in [(LAB[0]+16.0)/116.0 + LAB[1]/500,
+                                      (LAB[0]+16.0)/116.0,
+                                      (LAB[0]+16.0)/116.0 - LAB[2]/200]]
 
     def xyz2xyy(self, XYZ):
         return [round(x, 4) for x in [XYZ[0]/sum(XYZ),

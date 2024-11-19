@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QHeaderView, QLabel, QLayout, QPushButton,
-    QSizePolicy, QSlider, QSpinBox, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+    QHeaderView, QLayout, QPushButton, QSizePolicy,
+    QSlider, QSpinBox, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget)
 
 class Ui_Widget(object):
     def setupUi(self, Widget):
@@ -65,7 +65,7 @@ class Ui_Widget(object):
         self.spnNumColors = QSpinBox(self.frame)
         self.spnNumColors.setObjectName(u"spnNumColors")
         self.spnNumColors.setMinimum(1)
-        self.spnNumColors.setMaximum(5)
+        self.spnNumColors.setMaximum(15)
 
         self.gridLayout.addWidget(self.spnNumColors, 1, 5, 1, 1)
 
@@ -85,30 +85,23 @@ class Ui_Widget(object):
 
         self.verticalLayout.addWidget(self.frame)
 
-        self.frame_2 = QFrame(Widget)
-        self.frame_2.setObjectName(u"frame_2")
+        self.frmMain = QFrame(Widget)
+        self.frmMain.setObjectName(u"frmMain")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
-        self.frame_2.setSizePolicy(sizePolicy1)
-        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.frame_2)
+        sizePolicy1.setHeightForWidth(self.frmMain.sizePolicy().hasHeightForWidth())
+        self.frmMain.setSizePolicy(sizePolicy1)
+        self.frmMain.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frmMain.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.frmMain)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.lblImageDisplay = QLabel(self.frame_2)
-        self.lblImageDisplay.setObjectName(u"lblImageDisplay")
+        self.wdgRight = QWidget(self.frmMain)
+        self.wdgRight.setObjectName(u"wdgRight")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy2.setHorizontalStretch(1)
         sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.lblImageDisplay.sizePolicy().hasHeightForWidth())
-        self.lblImageDisplay.setSizePolicy(sizePolicy2)
-
-        self.horizontalLayout.addWidget(self.lblImageDisplay)
-
-        self.wdgRight = QWidget(self.frame_2)
-        self.wdgRight.setObjectName(u"wdgRight")
         sizePolicy2.setHeightForWidth(self.wdgRight.sizePolicy().hasHeightForWidth())
         self.wdgRight.setSizePolicy(sizePolicy2)
         self.verticalLayout_2 = QVBoxLayout(self.wdgRight)
@@ -129,7 +122,7 @@ class Ui_Widget(object):
         self.horizontalLayout.addWidget(self.wdgRight)
 
 
-        self.verticalLayout.addWidget(self.frame_2)
+        self.verticalLayout.addWidget(self.frmMain)
 
 
         self.retranslateUi(Widget)
@@ -145,7 +138,6 @@ class Ui_Widget(object):
         self.btnScanImage.setText(QCoreApplication.translate("Widget", u"Scan image", None))
         self.spnDPI.setSuffix(QCoreApplication.translate("Widget", u" DPI", None))
         self.spnNumColors.setPrefix(QCoreApplication.translate("Widget", u"Number of colors: ", None))
-        self.lblImageDisplay.setText("")
         self.btnPlotColors.setText(QCoreApplication.translate("Widget", u"Plot selected colors", None))
     # retranslateUi
 
