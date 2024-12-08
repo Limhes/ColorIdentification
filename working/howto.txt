@@ -1,0 +1,5 @@
+scanin -v1 -p -a -dipn -G 1.0 -O epson_1200u.ti3 target_epson1200_noCCT.tiff /usr/share/color/argyll/ref/it8.cht R240103.txt
+colprof -v -Za -qh -al -O "epson_1200u.icm" "epson_1200u"
+
+colprof -v -Za -qh -ax -O "epson_1200u.icm" "epson_1200u"
+
