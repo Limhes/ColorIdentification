@@ -1,0 +1,12 @@
+{
+    "files": [
+        "mainwindow.py",
+        "form.ui",
+        "ScrollableImage.py",
+        "MouseHandler.py",
+        "ColorProcessor.py",
+        "ColorList.py",
+        "LimhesColor.py",
+        "config.ini"
+    ]
+}
