@@ -1,6 +1,6 @@
 import numpy as np
 
-from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox
 from PySide6.QtGui import QColor
 from PySide6.QtCore import Qt, Slot, Signal
 
@@ -10,9 +10,9 @@ class ColorList(QTableWidget):
     remove_color = Signal(int)
 
     def __init__(self, parent=None):
-        QTableWidget.__init__(self, 0, 4, parent)
+        QTableWidget.__init__(self, 0, 5, parent)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.setHorizontalHeaderLabels(["ID", "notes", "Lab mean", "RGB mean"])
+        self.setHorizontalHeaderLabels(["ID", "show", "notes", "Lab mean", "RGB mean"])
 
     @Slot()
     def addColor(self, identifier, lab_mean, lab_stdev, rgb_mean):
@@ -21,8 +21,11 @@ class ColorList(QTableWidget):
         bg_color = QColor(*[int(x) for x in rgb_mean])
         text_color = QColor(0,0,0) if np.mean(rgb_mean) > 126 else QColor(255,255,255)
 
+
+
         row_content = [
             str(identifier),
+            str(""),
             str("    "),
             " ".join(['{:.2f}'.format(x) for x in lab_mean]),
             " ".join(['{:.2f}'.format(x) for x in rgb_mean])
@@ -30,7 +33,8 @@ class ColorList(QTableWidget):
 
         for i,s in enumerate(row_content):
             item = QTableWidgetItem(s)
-            if not i == 1: item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+            if i == 1: item.setCheckState(Qt.Checked)
+            if not i == 2: item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             item.setBackground(bg_color)
             item.setForeground(text_color)
             self.setItem( self.rowCount()-1, i, item )

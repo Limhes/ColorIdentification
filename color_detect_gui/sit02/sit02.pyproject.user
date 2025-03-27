@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 15.0.1, 2025-03-07T20:16:58. -->
+<!-- Written by QtCreator 15.0.1, 2025-03-08T13:47:02. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -153,7 +153,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">mainwindow.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/mainwindow.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/mainwindow.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -173,7 +173,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">ScrollableImage.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ScrollableImage.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ScrollableImage.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -193,7 +193,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">MouseHandler.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/MouseHandler.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/MouseHandler.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -213,7 +213,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">ColorProcessor.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ColorProcessor.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ColorProcessor.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -233,7 +233,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">ColorList.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ColorList.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/ColorList.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -253,7 +253,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">LimhesColor.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/LimhesColor.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/reneb/git/ColorIdentification/color_detect_gui/sit02/LimhesColor.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
