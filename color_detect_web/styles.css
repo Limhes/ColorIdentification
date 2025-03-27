@@ -1,0 +1,88 @@
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    height: 100vh;
+    margin: 0;
+    background-color: #ccc;
+
+    font-size: 10pt;
+    font-family: sans-serif;
+}
+
+table {
+/*     border: 1px solid #ddd; */
+    border-spacing: 5px;
+    font-size: 8pt;
+}
+    tbody {
+        display: block;
+        overflow: auto;
+        height: 90vh;
+    }
+    thead, tbody tr {
+        display: table;
+        width: 25vw;
+        table-layout: fixed;/* even columns width , fix width of table too*/
+    }
+    td th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0 10px 0 10px;
+    }
+    td.color_display, th.color_display {
+        background-color: #fff;
+        width: 20px;
+    }
+    td.color_name, th.color_name {
+        background-color: #fff;
+        width: 100px;
+    }
+    td.color_data, th.color_data {
+        background-color: #ddd;
+        width: 50px;
+    }
+    td.icon, th.icon {
+        width: 15px;
+    }
+    img.icon {
+        height: 20px;
+    }
+
+#color_picker {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100vh;
+    margin: 0;
+}
+    #image_canvas {
+        border: 1px solid black;
+        cursor: grab;
+        background-color: white;
+        height: 90vh;
+        width: 35vw;
+    }
+
+#color_organizer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100vh;
+    margin: 0;
+}
+
+#color_charts {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100vh;
+    margin: 0;
+}
+    #canvas_CH, #canvas_LC {
+        height: 45vh;
+        aspect-ratio: 1;
+        margin: 1vh;
+        background-color: white;
+    }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online color analyzer</title>
+    <link rel="stylesheet" href="styles.css"></link>
+    <link rel="icon" type="image/png" href="resources/favicon.png"></link>
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+    <color-picker id="color_picker"></color-picker>
+    <template id="color_picker_template">
+        <input id="picker_file" type="file" accept="image/*"></input>
+        <canvas id="image_canvas"></canvas>
+        <input id="picker_range_min" type="range" min="10" max="100" value="25" step="1"></input>
+        <input id="picker_range_max" type="range" min="10" max="100" value="25" step="1"></input>
+    </template>
+
+    <color-organizer id="color_organizer"></color-organizer>
+    <template id="color_organizer_template">
+        <input id="organizer_addcolor" type="button" value="Add color (inside rectangle)"></input>
+        <table>
+            <thead>
+                <th class="color_display">color</th>
+                <th class="color_name">name/notes</th>
+                <th class="color_data">&mu;<sub>L</sub> &#177; &sigma;<sub>L</sub></th>
+                <th class="color_data">&mu;<sub>C</sub> &#177; &sigma;<sub>C</sub></th>
+                <th class="color_data">&mu;<sub>h</sub> &#177; &sigma;<sub>h</sub></th>
+                <th class="icon"></th>
+                <th class="icon"></th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </template>
+    <template id="color_organizer_row_template" color_id="">
+        <tr>
+            <td class="color_display"></td>
+            <td class="color_name" contenteditable="true"></td>
+            <td class="color_data data_L"></td>
+            <td class="color_data data_a"></td>
+            <td class="color_data data_b"></td>
+            <td class="icon"><img class="icon toggle_visibility" height="20" src="./resources/visibility.png" /></td>
+            <td class="icon"><img class="icon delete" height="20" src="./resources/delete.png" /></td>
+        </tr>
+    </template>
+
+    <color-charts id="color_charts"></color-charts>
+    <template id="color_charts_template">
+        <div id="canvas_CH"></div>
+        <div id="canvas_LC"></div>
+    </template>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
