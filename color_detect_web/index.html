@@ -13,15 +13,32 @@
 
     <color-picker id="color_picker"></color-picker>
     <template id="color_picker_template">
-        <input id="picker_file" type="file" accept="image/*"></input>
-        <canvas id="image_canvas"></canvas>
-        <input id="picker_range_min" type="range" min="10" max="100" value="25" step="1"></input>
-        <input id="picker_range_max" type="range" min="10" max="100" value="25" step="1"></input>
+        <form>
+            <ul>
+                <li class="picker_input">
+                    <span>Zoom in/out on the picture using the mouse wheel. Pan left/right/up/down by dragging the image with the left mouse button held down.</span>
+                </li>
+                <li class="picker_canvas">
+                    <canvas id="image_canvas"></canvas>
+                </li>
+                <li class="picker_input">
+                    <label>Select scanned image: </label>
+                    <input id="picker_file" type="file" accept="image/*"></input>
+                </li>
+                <li class="picker_input">
+                    <label for="picker_range_min">Set orange box width</label>
+                    <input id="picker_range_min" type="range" min="10" max="100" value="25" step="1"></input>
+                </li>
+                <li class="picker_input">
+                    <label for="picker_range_max">Set orange box height</label>
+                    <input id="picker_range_max" type="range" min="10" max="100" value="25" step="1"></input>
+                </li>
+            </ul>
+        </form>
     </template>
 
     <color-organizer id="color_organizer"></color-organizer>
     <template id="color_organizer_template">
-        <input id="organizer_addcolor" type="button" value="Add color (inside rectangle)"></input>
         <table>
             <thead>
                 <th class="color_display">color</th>
@@ -33,6 +50,16 @@
                 <th class="icon"></th>
             </thead>
             <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <label for="organizer_addcolor">Is your target area inside the orange rectangle? Then:</label>
+                    </td>
+                    <td colspan="3">
+                        <input id="organizer_addcolor" type="button" value="add color"></input>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </template>
     <template id="color_organizer_row_template" color_id="">

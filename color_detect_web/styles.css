@@ -11,67 +11,115 @@ body {
     font-family: sans-serif;
 }
 
-table {
-/*     border: 1px solid #ddd; */
-    border-spacing: 5px;
-    font-size: 8pt;
-}
-    tbody {
-        display: block;
-        overflow: auto;
-        height: 90vh;
-    }
-    thead, tbody tr {
-        display: table;
-        width: 25vw;
-        table-layout: fixed;/* even columns width , fix width of table too*/
-    }
-    td th {
-        text-align: center;
-        vertical-align: middle;
-        padding: 0 10px 0 10px;
-    }
-    td.color_display, th.color_display {
-        background-color: #fff;
-        width: 20px;
-    }
-    td.color_name, th.color_name {
-        background-color: #fff;
-        width: 100px;
-    }
-    td.color_data, th.color_data {
-        background-color: #ddd;
-        width: 50px;
-    }
-    td.icon, th.icon {
-        width: 15px;
-    }
-    img.icon {
-        height: 20px;
-    }
-
 #color_picker {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
     height: 100vh;
-    margin: 0;
+    width: 35vw;
 }
-    #image_canvas {
-        border: 1px solid black;
-        cursor: grab;
-        background-color: white;
-        height: 90vh;
-        width: 35vw;
+    #color_picker form {
+        height: 100%;
+        width: 100%;
     }
+    #color_picker ul {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+    }
+        #color_picker li {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0 0 0;
+        }
+        .picker_canvas {
+            flex-basis: 0;
+            flex-grow: 100;
+        }
+            .picker_canvas canvas {
+                cursor: grab;
+                background-color: white;
+                height: 100%;
+                width: 100%;
+            }
+            .picker_canvas canvas:hover {
+                cursor: grabbing;
+            }
+        .picker_input {
+            flex-basis: 20px;
+            flex-grow: 1;
+            background-color: white;
+        }
+            .picker_input label {
+                margin-left: 10px;
+                width: 45%;
+                text-align: left;
+            }
+            .picker_input input {
+                margin-right: 10px;
+                width: 45%;
+                text-align: right;
+            }
+            .picker_input span {
+                margin: 10px;
+            }
+
 
 #color_organizer {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    height: 100vh;
+    list-style-type: none;
+    padding: 0;
     margin: 0;
+    height: 100vh;
+    width: 30vw;
 }
+
+    table {
+    /*     border: 1px solid #ddd; */
+        border-spacing: 5px;
+        font-size: 8pt;
+        height: 100%;
+        width: 100%;
+    }
+        tbody {
+            display: block;
+            overflow: auto;
+            height: 90vh;
+        }
+        thead, tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;/* even columns width , fix width of table too*/
+        }
+        td th {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0 10px 0 10px;
+        }
+        td.color_display, th.color_display {
+            background-color: #fff;
+            width: 20px;
+        }
+        td.color_name, th.color_name {
+            background-color: #fff;
+            width: 100px;
+        }
+        td.color_data, th.color_data {
+            background-color: #ddd;
+            width: 50px;
+        }
+        td.icon, th.icon {
+            width: 15px;
+        }
+        img.icon {
+            height: 20px;
+        }
 
 #color_charts {
     display: flex;

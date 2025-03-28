@@ -51,7 +51,6 @@ export default class ColorPicker extends HTMLElement {
         this.canvas.addEventListener("mouseleave", this.stopPanning);
 
         this.ctx = this.canvas.getContext("2d");
-
     }
 
     imageInputChanged = (event) => {
@@ -69,16 +68,42 @@ export default class ColorPicker extends HTMLElement {
     rangeMaxChanged = (event) => { this.rectYpct = event.target.value; this.drawImage(); }
 
     imageLoaded = () => {
-        const aspectRatio = this.image.width / this.image.height;
-        this.canvas.height = window.innerHeight - 100;
-        this.canvas.width = this.canvas.height * aspectRatio;
+        // set canvas element size to canvas drawing size (this is slightly ridiculous)
+        this.canvas.height = this.canvas.getBoundingClientRect().height
+        this.canvas.width = this.canvas.getBoundingClientRect().width
 
-        this.scale = this.canvas.width / this.image.width;
+        const heightRatio = this.image.height / this.canvas.height;
+        const widthRatio = this.image.width / this.canvas.width;
+
+        this.scale = (heightRatio < widthRatio) ? 1/widthRatio : 1/heightRatio;
         this.minScale = this.scale;
         this.imgX = 0;
         this.imgY = 0;
 
         this.drawImage();
+    }
+
+    drawImage() {
+        // keep image within canvas bounds
+        const scaledWidth = this.image.width * this.scale;
+        const scaledHeight = this.image.height * this.scale;
+
+        this.imgX = Math.min(0, Math.max(this.canvas.width - scaledWidth, this.imgX));
+        this.imgY = Math.min(0, Math.max(this.canvas.height - scaledHeight, this.imgY));
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.image, this.imgX, this.imgY, scaledWidth, scaledHeight);
+
+        // draw rectangle on top of image
+        this.ctx.beginPath();
+        this.ctx.lineWidth = this.lineWidth;
+        this.ctx.strokeStyle = "orange";
+        const rectWidth = parseInt(this.rectXpct * this.canvas.width / 100);
+        const rectHeight = parseInt(this.rectYpct * this.canvas.height / 100);
+        const rectX = parseInt((this.canvas.width - rectWidth)/2);
+        const rectY = parseInt((this.canvas.height - rectHeight)/2);
+        this.ctx.rect(rectX, rectY, rectWidth, rectHeight);
+        this.ctx.stroke();
     }
 
     canvasWheel = (event) => {
@@ -124,28 +149,6 @@ export default class ColorPicker extends HTMLElement {
     stopPanning = () => {
         this.isDragging = false;
         this.canvas.style.cursor = "grab";
-    }
-
-    drawImage() {
-        // keep image within canvas bounds
-        const scaledWidth = this.image.width * this.scale;
-        const scaledHeight = this.image.height * this.scale;
-        this.imgX = Math.min(0, Math.max(this.canvas.width - scaledWidth, this.imgX));
-        this.imgY = Math.min(0, Math.max(this.canvas.height - scaledHeight, this.imgY));
-
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(this.image, this.imgX, this.imgY, this.image.width * this.scale, this.image.height * this.scale);
-
-        // draw rectangle on top of image
-        this.ctx.beginPath();
-        this.ctx.lineWidth = this.lineWidth;
-        this.ctx.strokeStyle = "orange";
-        const rectWidth = parseInt(this.rectXpct * this.canvas.width / 100);
-        const rectHeight = parseInt(this.rectYpct * this.canvas.height / 100);
-        const rectX = parseInt((this.canvas.width - rectWidth)/2);
-        const rectY = parseInt((this.canvas.height - rectHeight)/2);
-        this.ctx.rect(rectX, rectY, rectWidth, rectHeight);
-        this.ctx.stroke();
     }
 
     getVisiblePixels() {
