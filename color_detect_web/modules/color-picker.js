@@ -27,23 +27,16 @@ export default class ColorPicker extends HTMLElement {
     }
 
     connectedCallback() {
-        const template = document.getElementById("color_picker_template");
-        const clone = template.content.cloneNode(true);
-        this.appendChild(clone);
+        this.appendChild(document.getElementById("color_picker_template").content.cloneNode(true));
 
-        const file_input = this.querySelector("#picker_file");
-        file_input.addEventListener("change", this.imageInputChanged);
-
-        const file_range_min = this.querySelector("#picker_range_min");
-        file_range_min.addEventListener("input", this.rangeMinChanged);
-
-        const file_range_max = this.querySelector("#picker_range_max");
-        file_range_max.addEventListener("input", this.rangeMaxChanged);
+        this.querySelector("input[type='file']").addEventListener("change", this.imageInputChanged);
+        this.querySelector("input[type='range'][range='min']").addEventListener("input", this.rangeMinChanged);
+        this.querySelector("input[type='range'][range='max']").addEventListener("input", this.rangeMaxChanged);
 
         this.image = new Image();
         this.image.addEventListener("load", this.imageLoaded);
 
-        this.canvas = this.querySelector("#image_canvas");
+        this.canvas = this.querySelector("canvas");
         this.canvas.addEventListener("wheel", this.canvasWheel);
         this.canvas.addEventListener("mousedown", this.canvasMouseDown);
         this.canvas.addEventListener("mousemove", this.canvasMouseMove);

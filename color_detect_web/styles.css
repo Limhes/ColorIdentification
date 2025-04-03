@@ -1,101 +1,85 @@
 body {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     align-items: stretch;
+
     height: 100vh;
     margin: 0;
+    padding: 0;
+    overflow: hidden;
     background-color: #ccc;
 
     font-size: 10pt;
     font-family: sans-serif;
 }
 
-#color_picker {
-    height: 100vh;
-    width: 35vw;
-}
-    #color_picker form {
-        height: 100%;
-        width: 100%;
-    }
-    #color_picker ul {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-    }
-        #color_picker li {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin: 5px 0 0 0;
-        }
-        .picker_canvas {
-            flex-basis: 0;
-            flex-grow: 100;
-        }
-            .picker_canvas canvas {
-                cursor: grab;
-                background-color: white;
-                height: 100%;
-                width: 100%;
-            }
-            .picker_canvas canvas:hover {
-                cursor: grabbing;
-            }
-        .picker_input {
-            flex-basis: 20px;
-            flex-grow: 1;
-            background-color: white;
-        }
-            .picker_input label {
-                margin-left: 10px;
-                width: 45%;
-                text-align: left;
-            }
-            .picker_input input {
-                margin-right: 10px;
-                width: 45%;
-                text-align: right;
-            }
-            .picker_input span {
-                margin: 10px;
-            }
+color-picker {
+    flex: 1 1 0;
 
-
-#color_organizer {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    list-style-type: none;
+}
+    color-picker > canvas {
+        flex: 100 0 0;
+        background-color: white;
+        margin-bottom: 5px;
+
+        cursor: grab;
+    }
+    color-picker > canvas:hover {
+        cursor: grabbing;
+    }
+    color-picker > div {
+        flex: 1 0 20px;
+        background-color: white;
+        margin-bottom: 5px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+        color-picker > div > label {
+            margin-left: 10px;
+            flex: 1 1 0;
+            text-align: left;
+        }
+        color-picker > div > input {
+            margin-right: 10px;
+            flex: 1 1 0;
+            text-align: right;
+        }
+
+
+color-organizer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+
     padding: 0;
     margin: 0;
-    height: 100vh;
-    width: 30vw;
+    flex: 1 1 0;
 }
+    #color_table_wrapper {
+        overflow-y: scroll;
+    }
+    #color_table_form {
+        height: 20px;
+    }
 
     table {
-    /*     border: 1px solid #ddd; */
         border-spacing: 5px;
         font-size: 8pt;
         height: 100%;
         width: 100%;
     }
-        tbody {
-            display: block;
-            overflow: auto;
-            height: 90vh;
-        }
-        thead, tbody tr {
-            display: table;
+        thead, tfoot, tbody, tr {
             width: 100%;
-            table-layout: fixed;/* even columns width , fix width of table too*/
+        }
+        tr {
+            height: 20px;
         }
         td th {
             text-align: center;
@@ -104,33 +88,29 @@ body {
         }
         td.color_display, th.color_display {
             background-color: #fff;
-            width: 20px;
         }
         td.color_name, th.color_name {
             background-color: #fff;
-            width: 100px;
         }
         td.color_data, th.color_data {
             background-color: #ddd;
-            width: 50px;
         }
         td.icon, th.icon {
-            width: 15px;
+            /* width: 15px; */
         }
         img.icon {
             height: 20px;
         }
 
-#color_charts {
+color-charts {
+    flex: 1 1 0;
+
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    height: 100vh;
-    margin: 0;
 }
     #canvas_CH, #canvas_LC {
-        height: 45vh;
-        aspect-ratio: 1;
-        margin: 1vh;
+        flex: 1 1 0;
+        padding: 5px;
         background-color: white;
     }

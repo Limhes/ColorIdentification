@@ -6,61 +6,48 @@
     <title>Online color analyzer</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link rel="icon" type="image/png" href="resources/favicon.png"></link>
-    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 <body>
-
-    <color-picker id="color_picker"></color-picker>
+    <color-picker></color-picker>
     <template id="color_picker_template">
-        <form>
-            <ul>
-                <li class="picker_input">
-                    <span>Zoom in/out on the picture using the mouse wheel. Pan left/right/up/down by dragging the image with the left mouse button held down.</span>
-                </li>
-                <li class="picker_canvas">
-                    <canvas id="image_canvas"></canvas>
-                </li>
-                <li class="picker_input">
-                    <label>Select scanned image: </label>
-                    <input id="picker_file" type="file" accept="image/*"></input>
-                </li>
-                <li class="picker_input">
-                    <label for="picker_range_min">Set orange box width</label>
-                    <input id="picker_range_min" type="range" min="10" max="100" value="25" step="1"></input>
-                </li>
-                <li class="picker_input">
-                    <label for="picker_range_max">Set orange box height</label>
-                    <input id="picker_range_max" type="range" min="10" max="100" value="25" step="1"></input>
-                </li>
-            </ul>
-        </form>
+        <div>Zoom in/out on the picture using the mouse wheel. Pan left/right/up/down by dragging the image with the left mouse button held down.</div>
+        <canvas></canvas>
+        <div>
+            <label>Select scanned image: </label>
+            <input id="picker_file" type="file" accept="image/*"></input>
+        </div>
+        <div>
+            <label for="picker_range_min">Set orange box width</label>
+            <input id="picker_range_min" type="range" range="min" min="10" max="100" value="25" step="1"></input>
+        </div>
+        <div>
+            <label for="picker_range_max">Set orange box height</label>
+            <input id="picker_range_max" type="range" range="max" min="10" max="100" value="25" step="1"></input>
+        </div>
     </template>
 
-    <color-organizer id="color_organizer"></color-organizer>
+    <color-organizer></color-organizer>
     <template id="color_organizer_template">
-        <table>
-            <thead>
-                <th class="color_display">color</th>
-                <th class="color_name">name/notes</th>
-                <th class="color_data">&mu;<sub>L</sub> &#177; &sigma;<sub>L</sub></th>
-                <th class="color_data">&mu;<sub>C</sub> &#177; &sigma;<sub>C</sub></th>
-                <th class="color_data">&mu;<sub>h</sub> &#177; &sigma;<sub>h</sub></th>
-                <th class="icon"></th>
-                <th class="icon"></th>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <label for="organizer_addcolor">Is your target area inside the orange rectangle? Then:</label>
-                    </td>
-                    <td colspan="3">
-                        <input id="organizer_addcolor" type="button" value="add color"></input>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <div id="color_table_wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="color_display">color</th>
+                        <th class="color_name">name/notes</th>
+                        <th class="color_data">&mu;<sub>L</sub> &#177; &sigma;<sub>L</sub></th>
+                        <th class="color_data">&mu;<sub>C</sub> &#177; &sigma;<sub>C</sub></th>
+                        <th class="color_data">&mu;<sub>h</sub> &#177; &sigma;<sub>h</sub></th>
+                        <th class="icon"></th>
+                        <th class="icon"></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="color_table_form">
+            <label for="organizer_addcolor">Is your target area inside the orange rectangle? Then:</label>
+            <input id="organizer_addcolor" type="button" value="add color"></input>
+        </div>
     </template>
     <template id="color_organizer_row_template" color_id="">
         <tr>

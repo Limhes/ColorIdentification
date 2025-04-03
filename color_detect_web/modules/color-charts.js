@@ -1,3 +1,5 @@
+import "./plotly-3.0.1.min.js";
+
 export default class ColorCharts extends HTMLElement {
 
     canvas_ids = ["canvas_CH", "canvas_LC"];
@@ -47,7 +49,7 @@ export default class ColorCharts extends HTMLElement {
                 font: { size: 16 },
                 subtitle: {
                     text: 'Note that light purple/red/orange is called pink and dark yellow/orange/red is called brown.',
-                    font: { size: 10 }
+                    font:    { size: 10 }
                 }
             },
             xaxis: {
@@ -104,9 +106,7 @@ export default class ColorCharts extends HTMLElement {
     }
 
     connectedCallback() {
-        const template = document.getElementById("color_charts_template");
-        const clone = template.content.cloneNode(true);
-        this.appendChild(clone);
+        this.appendChild(document.querySelector("#color_charts_template").content.cloneNode(true));
 
         this.hue_annotations.forEach((ann) => {
             this.layout[0].annotations.push({
@@ -148,15 +148,14 @@ export default class ColorCharts extends HTMLElement {
 
     addColor(lch, lch_stdev, rgb) {
         let id = this.count_picked_colors++;
-        let name = "Stamp " + String(id);
+        let name = String(id);
 
-        //this.data[0][0].r.push(lch[this.lch_display[0][0]]);
-        this.data[0][0].r.push(1);
-        this.data[0][0].theta.push(lch[this.lch_display[0][1]]);
+        this.data[0][0].r.push(1); // unit-circle display
+        this.data[0][0].theta.push(lch[2]); // hue
         this.data[0][0].text.push(name);
 
-        this.data[1][0].x.push(lch[this.lch_display[1][0]]);
-        this.data[1][0].y.push(lch[this.lch_display[1][1]]);
+        this.data[1][0].x.push(lch[1]); // chroma
+        this.data[1][0].y.push(lch[0]); // lightness
         this.data[1][0].text.push(name);
 
         this.redrawCharts();
@@ -164,12 +163,12 @@ export default class ColorCharts extends HTMLElement {
     }
 
     showColor(id, lch, lch_stdev, rgb, name) {
-        this.data[0][0].r[id] = 1; //lch[this.lch_display[0][0]];
-        this.data[0][0].theta[id] = lch[this.lch_display[0][1]];
+        this.data[0][0].r[id] = 1; // unit-circle display
+        this.data[0][0].theta[id] = lch[2]; // hue
         this.data[0][0].text[id] = name;
 
-        this.data[1][0].x[id] = lch[this.lch_display[1][0]];
-        this.data[1][0].y[id] = lch[this.lch_display[1][1]];
+        this.data[1][0].x[id] = lch[1]; // chroma
+        this.data[1][0].y[id] = lch[0]; // lightness
         this.data[1][0].text[id] = name;
 
         this.redrawCharts();
