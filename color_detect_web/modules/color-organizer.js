@@ -2,6 +2,8 @@ import {LCHtoRGB, RGBtoLCH} from "./tools.js";
 
 export default class ColorOrganizer extends HTMLElement {
 
+    all_rows = [];
+
     constructor() {
         super();
     }
@@ -11,13 +13,14 @@ export default class ColorOrganizer extends HTMLElement {
 
         this.querySelector("#organizer_addcolor").addEventListener("click", (event) => {
             const color_data = document.querySelector("color-picker").getVisiblePixels();
-            this.addColor(color_data[0], color_data[1], color_data[2]);
+            this.addColor(color_data[0], color_data[1], color_data[2], color_data[3]);
         });
     }
 
-    addColor = (color_lch, color_lch_sigma, color_rgb) => {
-        const new_row = new ColorOrganizerRow(color_lch, color_lch_sigma, color_rgb);
+    addColor = (color_lch, color_lch_sigma, color_rgb, coords) => {
+        const new_row = new ColorOrganizerRow(color_lch, color_lch_sigma, color_rgb, coords);
         this.querySelector("tbody").appendChild(new_row.getDOMContent());
+        this.all_rows.push(new_row);
     }
 
 };
@@ -31,14 +34,17 @@ class ColorOrganizerRow {
     color_lch = [];
     color_lch_sigma = [];
     color_rgb = [];
+    rect_coords = [];
+    is_deleted = false;
 
-    constructor(color_lch, color_lch_sigma, color_rgb) {
+    constructor(color_lch, color_lch_sigma, color_rgb, coords) {
         let color_data = document.querySelector("color-charts").addColor(color_lch, color_lch_sigma, color_rgb);
         this.color_id = color_data[0];
         this.color_lch = color_lch;
         this.color_lch_sigma = color_lch_sigma;
         this.color_rgb = color_rgb;
         this.color_name = color_data[1];
+        this.rect_coords = coords;
 
         // create row HTML from template
         this.dom_content = document.querySelector("#color_organizer_row_template").content.cloneNode(true);
@@ -63,6 +69,7 @@ class ColorOrganizerRow {
     removeRow = (event) => {
         document.querySelector("color-charts").hideColor(this.color_id);
         document.querySelector("color-organizer tbody").removeChild(event.target.parentElement.parentElement);
+        this.is_deleted = true;
     }
 
     updateName = (event) => {

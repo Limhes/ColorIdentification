@@ -1,3 +1,6 @@
+This project was abandoned. An updated and much better version can be found here: https://github.com/Limhes/stamp_analyzer
+
+
 # ColorIdentification
 
 ## Color identification software with GUI

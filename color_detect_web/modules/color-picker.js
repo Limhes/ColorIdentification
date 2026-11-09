@@ -172,6 +172,12 @@ export default class ColorPicker extends HTMLElement {
         const rgb_r_s = stdev(rgb_r);
         const rgb_g_s = stdev(rgb_g);
         const rgb_b_s = stdev(rgb_b);
-        return [[lch_l_s[0], lch_c_s[0], lch_h_s[0]], [lch_l_s[1], lch_c_s[1], lch_h_s[1]], [rgb_r_s[0], rgb_g_s[0], rgb_b_s[0]]];
+
+        return [
+            [lch_l_s[0], lch_c_s[0], lch_h_s[0]],
+            [lch_l_s[1], lch_c_s[1], lch_h_s[1]],
+            [rgb_r_s[0], rgb_g_s[0], rgb_b_s[0]],
+            [rectX, rectY, rectWidth, rectHeight]
+        ];
     }
 };
